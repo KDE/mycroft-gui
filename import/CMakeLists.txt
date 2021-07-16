@@ -12,6 +12,9 @@ set(mycroftimport_SRCS
     globalsettings.cpp
     filereader.cpp
     audiorec.cpp
+    mediaservice.cpp
+    thirdparty/fftcalc.cpp
+    thirdparty/fft.cpp
     )
 
 configure_file(controllerconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/controllerconfig.h)
