@@ -14,6 +14,7 @@
         <file>qml/VideoPlayer.qml</file>
         <file>qml/CardDelegate.qml</file>
         <file>qml/Units.qml</file>
+        <file>qml/SoundEffects.qml</file>
         <file>qml/private/ImageBackground.qml</file>
     </qresource>
 </RCC>
