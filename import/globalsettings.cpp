@@ -88,3 +88,18 @@ void GlobalSettings::setUsePTTClient(bool usePTTClient)
     m_settings.setValue(QStringLiteral("usePTTClient"), usePTTClient);
     emit usePTTClientChanged();
 }
+
+bool GlobalSettings::useHivemindProtocol() const
+{
+    return m_settings.value(QStringLiteral("useHivemindProtocol"), false).toBool();
+}
+
+void GlobalSettings::setUseHivemindProtocol(bool useHivemindProtocol)
+{
+    if (GlobalSettings::useHivemindProtocol() == useHivemindProtocol) {
+        return;
+    }
+
+    m_settings.setValue(QStringLiteral("useHivemindProtocol"), useHivemindProtocol);
+    emit useHivemindProtocolChanged();
+}

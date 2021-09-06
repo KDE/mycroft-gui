@@ -329,7 +329,7 @@ void MycroftController::onMainSocketMessageReceived(const QString &message)
     }
 }
 
-void MycroftController::sendRequest(const QString &type, const QVariantMap &data)
+void MycroftController::sendRequest(const QString &type, const QVariantMap &data, const QVariantMap &context)
 {
     if (m_mainWebSocket.state() != QAbstractSocket::ConnectedState) {
         qWarning() << "mycroft connection not open!";
@@ -340,11 +340,15 @@ void MycroftController::sendRequest(const QString &type, const QVariantMap &data
     root[QStringLiteral("type")] = type;
     root[QStringLiteral("data")] = QJsonObject::fromVariantMap(data);
 
+    if(m_appSettingObj->useHivemindProtocol()){
+        root[QStringLiteral("context")] = QJsonObject::fromVariantMap(context);
+    }
+
     QJsonDocument doc(root);
     m_mainWebSocket.sendTextMessage(QString::fromUtf8(doc.toJson()));
 }
 
-void MycroftController::sendBinary(const QString &type, const QJsonObject &data) 
+void MycroftController::sendBinary(const QString &type, const QJsonObject &data, const QVariantMap &context)
 {
     if (m_mainWebSocket.state() != QAbstractSocket::ConnectedState) {
         qWarning() << "mycroft connection not open!";
@@ -354,6 +358,10 @@ void MycroftController::sendBinary(const QString &type, const QJsonObject &data)
     socketObject[QStringLiteral("type")] = type;
     socketObject[QStringLiteral("data")] = data;
 
+    if(m_appSettingObj->useHivemindProtocol()){
+        socketObject[QStringLiteral("context")] = QJsonObject::fromVariantMap(context);
+    }
+
     QJsonDocument doc;
     doc.setObject(socketObject);
     QByteArray docbin = doc.toJson(QJsonDocument::Compact);
@@ -362,7 +370,11 @@ void MycroftController::sendBinary(const QString &type, const QJsonObject &data)
 
 void MycroftController::sendText(const QString &message)
 {
-    sendRequest(QStringLiteral("recognizer_loop:utterance"), QVariantMap({{QStringLiteral("utterances"), QStringList({message})}}));
+    if(!m_appSettingObj->useHivemindProtocol()){
+        sendRequest(QStringLiteral("recognizer_loop:utterance"), QVariantMap({{QStringLiteral("utterances"), QStringList({message})}}));
+    } else {
+        sendRequest(QStringLiteral("recognizer_loop:utterance"), QVariantMap({{QStringLiteral("utterances"), QStringList({message})}}), QVariantMap({{QStringLiteral("source"), QStringLiteral("debug_cli")}, {QStringLiteral("destination"), QStringLiteral("skills")}}));
+    }
 }
 
 void MycroftController::registerView(AbstractSkillView *view)

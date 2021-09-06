@@ -128,5 +128,11 @@ Kirigami.ScrollablePage {
             onCheckedChanged: Mycroft.GlobalSettings.usesRemoteTTS = checked
             visible: Mycroft.GlobalSettings.displayRemoteConfig
         }
+
+        Controls.Switch {
+            text: "Hivemind Protocol"
+            checked: Mycroft.GlobalSettings.useHivemindProtocol
+            onCheckedChanged: Mycroft.GlobalSettings.useHivemindProtocol = checked
+        }
     }
 }

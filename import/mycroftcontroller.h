@@ -99,8 +99,8 @@ public Q_SLOTS:
     void start();
     void disconnectSocket();
     void reconnect();
-    void sendRequest(const QString &type, const QVariantMap &data);
-    void sendBinary(const QString &type, const QJsonObject &data);
+    void sendRequest(const QString &type, const QVariantMap &data, const QVariantMap &context = QVariantMap({}));
+    void sendBinary(const QString &type, const QJsonObject &data, const QVariantMap &context = QVariantMap({}));
     void sendText(const QString &message);
     void startPTTClient();
 

@@ -35,6 +35,7 @@ class GlobalSettings : public QObject
     Q_PROPERTY(bool usesRemoteTTS READ usesRemoteTTS WRITE setUsesRemoteTTS NOTIFY usesRemoteTTSChanged)
     Q_PROPERTY(bool displayRemoteConfig READ displayRemoteConfig WRITE setDisplayRemoteConfig NOTIFY displayRemoteConfigChanged)
     Q_PROPERTY(bool usePTTClient READ usePTTClient WRITE setUsePTTClient NOTIFY usePTTClient)
+    Q_PROPERTY(bool useHivemindProtocol READ useHivemindProtocol WRITE setUseHivemindProtocol NOTIFY useHivemindProtocolChanged)
 
 public:
     explicit GlobalSettings(QObject *parent=0);
@@ -52,6 +53,8 @@ public:
     void setDisplayRemoteConfig(bool displayRemoteConfig);
     bool usePTTClient() const;
     void setUsePTTClient(bool usePttClient);
+    bool useHivemindProtocol() const;
+    void setUseHivemindProtocol(bool useHivemindProtocol);
 
 Q_SIGNALS:
     void webSocketChanged();
@@ -59,6 +62,7 @@ Q_SIGNALS:
     void usesRemoteTTSChanged();
     void displayRemoteConfigChanged();
     void usePTTClientChanged();
+    void useHivemindProtocolChanged();
 
 private:
     QSettings m_settings;
