@@ -224,6 +224,11 @@ QMediaPlayer::State MediaService::playbackState() const
 void MediaService::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     emit mediaStatusChanged(status);
+
+    m_currentMediaStatus.clear();
+    m_currentMediaStatus.insert(QStringLiteral("status"), status);
+    m_controller->sendRequest(QStringLiteral("gui.player.media.service.current.media.status"), m_currentMediaStatus);
+
     if (status == QMediaPlayer::LoadedMedia || status == QMediaPlayer::BufferedMedia)
     {
         QStringList metadataAvailableList = m_player->availableMetaData();
