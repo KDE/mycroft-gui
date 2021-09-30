@@ -15,6 +15,7 @@
         <file>qml/CardDelegate.qml</file>
         <file>qml/Units.qml</file>
         <file>qml/SoundEffects.qml</file>
+        <file>qml/BusyIndicator.qml</file>
         <file>qml/private/ImageBackground.qml</file>
     </qresource>
 </RCC>
