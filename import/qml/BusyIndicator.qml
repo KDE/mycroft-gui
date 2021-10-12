@@ -20,10 +20,117 @@ import QtQuick.Controls 2.12 as Controls
 
 Controls.BusyIndicator {
     id: control
-
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-                             implicitContentHeight + topPadding + bottomPadding)
+    width: 200
+    height: 200
     padding: 0
+
+    //Allow animations to be run at a slower speed if required
+    property real speed: 1
+
+    onRunningChanged: {
+        if(!running) {
+            changeStage()
+        }
+    }
+
+    function changeStage() {
+        canvas.startDeg = 0
+        canvas.endDeg = 2
+    }
+
+    contentItem: Canvas {
+        id: canvas
+        anchors.fill: parent
+        antialiasing: true
+        visible: control.visible
+
+        renderTarget: Canvas.FramebufferObject
+        property int startDeg: 0
+        property int endDeg: 2
+        property color primaryColor: '#22A7F0'
+
+        Behavior on primaryColor {
+            ColorAnimation { duration: 200 }
+        }
+
+        onStartDegChanged: requestPaint()
+        onEndDegChanged: requestPaint()
+        onPrimaryColorChanged: requestPaint()
+
+        onPaint: {
+            function deg2Rad(deg) {
+                return (deg / 180) * Math.PI;
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 20;
+            ctx.lineCap="round";
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, (canvas.height > canvas.width ? canvas.width : canvas.height) / 2 - 20, deg2Rad(startDeg - 90), deg2Rad(endDeg - 90), false);
+            ctx.stroke();
+        }
+    }
+
+    SequentialAnimation {
+        id: seqAnimator
+        running: control.running
+        loops: Animation.Infinite
+
+        ParallelAnimation {
+
+            NumberAnimation {
+                target: canvas
+                property: "endDeg"
+                to: 360
+                duration: 600 * control.speed
+                easing.type: Easing.InOutQuad
+            }
+
+            NumberAnimation {
+                target: canvas
+                property: "startDeg"
+                to: 360
+                duration: 900 * control.speed
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        ScriptAction {
+            script: changeStage()
+        }
+
+        ParallelAnimation {
+
+            NumberAnimation {
+                target: canvas
+                property: "endDeg"
+                to: 360
+                duration: 900 * control.speed
+                easing.type: Easing.InOutQuad
+            }
+
+            NumberAnimation {
+                loops: 1
+                target: canvas
+                property: "rotation"
+                duration: 1200 * control.speed
+                from: 0
+                to: 720
+            }
+
+            NumberAnimation {
+                target: canvas
+                property: "startDeg"
+                to: 360
+                duration: 1200 * control.speed
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        ScriptAction {
+            script: changeStage()
+        }
+    }
 }
