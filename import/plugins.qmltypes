@@ -533,6 +533,26 @@ Module {
         Signal { name: "backRequested" }
     }
     Component {
+        prototype: "QQuickItem"
+        name: "Mycroft/MarqueeText 1.0"
+        exports: ["Mycroft/MarqueeText 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "speed"; type: "int" }
+        Property { name: "delay"; type: "int" }
+        Property { name: "marqueeWidth"; type: "QVariant" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "text"; type: "string" }
+        Property { name: "font"; type: "QFont" }
+        Property { name: "minimumPointSize"; type: "int" }
+        Property { name: "minimumPixelSize"; type: "int" }
+        Property { name: "fontSizeMode"; type: "int" }
+        Property { name: "horizontalAlignment"; type: "int" }
+        Property { name: "verticalAlignment"; type: "int" }
+        Method { name: "reset"; type: "QVariant" }
+    }
+    Component {
         prototype: "QQuickFlickable"
         name: "Mycroft/PaginatedText 1.0"
         exports: ["Mycroft/PaginatedText 1.0"]

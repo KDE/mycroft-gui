@@ -46,4 +46,4 @@ install(TARGETS mycroftplugin DESTINATION ${KDE_INSTALL_QMLDIR}/Mycroft)
 
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/Mycroft)
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/Mycroft)
-
+install(FILES plugins.qmltypes DESTINATION ${KDE_INSTALL_QMLDIR}/Mycroft)

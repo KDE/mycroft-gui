@@ -102,6 +102,7 @@ void MycroftPlugin::registerTypes(const char *uri)
     qmlRegisterType(QUrl(QStringLiteral("qrc:/qml/BoxLayout.qml")), uri, 1, 0, "BoxLayout");
     qmlRegisterType(QUrl(QStringLiteral("qrc:/qml/CardDelegate.qml")), uri, 1, 0, "CardDelegate");
     qmlRegisterType(QUrl(QStringLiteral("qrc:/qml/BusyIndicator.qml")), uri, 1, 0, "BusyIndicator");
+    qmlRegisterType(QUrl(QStringLiteral("qrc:/qml/MarqueeText.qml")), uri, 1, 0, "MarqueeText");
 
     qmlRegisterUncreatableType<ActiveSkillsModel>(uri, 1, 0, "ActiveSkillsModel", QStringLiteral("You cannot instantiate items of type ActiveSkillsModel"));
     qmlRegisterUncreatableType<DelegatesModel>(uri, 1, 0, "DelegatesModel", QStringLiteral("You cannot instantiate items of type DelegatesModel"));
