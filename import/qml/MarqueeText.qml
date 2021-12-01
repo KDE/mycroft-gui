@@ -14,6 +14,8 @@ Item {
     property int speed: 1000
     property int delay: 1000
     property var marqueeWidth: width
+    property bool rightToLeft: false
+    property alias elide: marqueeText.elide
 
     onWidthChanged: {
         marqueeWidth = width
@@ -77,13 +79,13 @@ Item {
                 target: marqueeText
                 property: "x"
                 from: 0
-                to: marqueeWidth
+                to: !rightToLeft ? marqueeWidth : -marqueeWidth
                 duration: speed
             }
             PropertyAnimation {
                 target: coverText
                 property: "x"
-                from: control.x - marqueeWidth
+                from: !rightToLeft ? control.x - marqueeWidth : control.x + marqueeWidth
                 to: marqueeText.x
                 duration: speed
             }
