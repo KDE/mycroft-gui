@@ -4,7 +4,7 @@ import QtQuick.Controls 2.12
 Item {
     id: control
     property alias color: marqueeText.color
-    property alias text: marqueeText.text
+    property alias text: rtlDetector.text
     property alias font: marqueeText.font
     property alias minimumPointSize: marqueeText.minimumPointSize
     property alias minimumPixelSize: marqueeText.minimumPixelSize
@@ -38,12 +38,25 @@ Item {
     }
 
     Text {
+        id: rtlDetector
+        visible: false
+        width: parent.width
+
+        onHorizontalAlignmentChanged: {
+            if(rtlDetector.horizontalAlignment == Text.AlignRight) {
+                rightToLeft = true;
+            }
+        }
+    }
+
+    Text {
         id: marqueeText;
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         height: parent.height
         width: parent.width
         elide: Text.ElideRight
+        text: rtlDetector.text
     }
 
     Text {
