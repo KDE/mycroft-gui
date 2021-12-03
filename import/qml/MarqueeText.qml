@@ -9,13 +9,13 @@ Item {
     property alias minimumPointSize: marqueeText.minimumPointSize
     property alias minimumPixelSize: marqueeText.minimumPixelSize
     property alias fontSizeMode: marqueeText.fontSizeMode
-    property alias horizontalAlignment: marqueeText.horizontalAlignment
     property alias verticalAlignment: marqueeText.verticalAlignment
-    property int speed: 1000
-    property int delay: 1000
+    property alias paintedWidth: marqueeText.paintedWidth
+    property int speed: 4000
+    property int delay: 4000
     property var marqueeWidth: width
-    property bool rightToLeft: false
-    property alias elide: marqueeText.elide
+    property bool righToLeft: false
+    property int distance: marqueeWidth / 2
 
     onWidthChanged: {
         marqueeWidth = width
@@ -28,11 +28,12 @@ Item {
             marqueeText.width = control.marqueeWidth
             marqueeText.x = control.x
             coverText.width = marqueeText.width
-            coverText.x = 0 - marqueeWidth
+            coverText.x = marqueeText.width
             marqueeAnimator.start()
         } else {
             marqueeAnimator.start()
         }
+        marqueeAnimator.start()
         marqueeText.enabled = false
         marqueeText.enabled = true
     }
@@ -44,19 +45,20 @@ Item {
 
         onHorizontalAlignmentChanged: {
             if(rtlDetector.horizontalAlignment == Text.AlignRight) {
-                rightToLeft = true;
+                leftToRight = true;
             }
         }
     }
 
     Text {
         id: marqueeText;
-        horizontalAlignment: Text.AlignHCenter
+        horizontalAlignment: Text.AlignHLeft
         verticalAlignment: Text.AlignVCenter
         height: parent.height
         width: parent.width
-        elide: Text.ElideRight
+        elide: Text.ElideNone
         text: rtlDetector.text
+        visible: x < parent.width ? 1 : 0
     }
 
     Text {
@@ -73,6 +75,7 @@ Item {
         minimumPointSize: marqueeText.minimumPointSize
         minimumPixelSize: marqueeText.minimumPixelSize
         fontSizeMode: marqueeText.fontSizeMode
+        opacity: 0
     }
 
     SequentialAnimation {
@@ -81,24 +84,31 @@ Item {
         running: false
 
         PropertyAnimation {
+            id: marqueeAnimatorDelayAnimator
             target: marqueeText
             property: "opacity"
             from: 1
             to: 1
             duration: control.delay
         }
+
+        ScriptAction {
+            script: coverText.opacity = 1
+        }
+
         ParallelAnimation {
             PropertyAnimation {
                 target: marqueeText
                 property: "x"
                 from: 0
-                to: !rightToLeft ? marqueeWidth : -marqueeWidth
+                to: !righToLeft ? (control.x + marqueeText.paintedWidth) + distance : (control.x - marqueeText.paintedWidth) - distance
                 duration: speed
             }
+
             PropertyAnimation {
                 target: coverText
                 property: "x"
-                from: !rightToLeft ? control.x - marqueeWidth : control.x + marqueeWidth
+                from: !righToLeft ? (control.x - marqueeText.paintedWidth) - distance  : (control.x + marqueeText.paintedWidth) + distance
                 to: marqueeText.x
                 duration: speed
             }

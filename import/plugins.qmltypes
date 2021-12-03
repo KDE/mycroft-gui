@@ -542,14 +542,16 @@ Module {
         Property { name: "speed"; type: "int" }
         Property { name: "delay"; type: "int" }
         Property { name: "marqueeWidth"; type: "QVariant" }
+        Property { name: "righToLeft"; type: "bool" }
+        Property { name: "distance"; type: "int" }
         Property { name: "color"; type: "QColor" }
         Property { name: "text"; type: "string" }
         Property { name: "font"; type: "QFont" }
         Property { name: "minimumPointSize"; type: "int" }
         Property { name: "minimumPixelSize"; type: "int" }
         Property { name: "fontSizeMode"; type: "int" }
-        Property { name: "horizontalAlignment"; type: "int" }
         Property { name: "verticalAlignment"; type: "int" }
+        Property { name: "paintedWidth"; type: "double"; isReadonly: true }
         Method { name: "reset"; type: "QVariant" }
     }
     Component {
