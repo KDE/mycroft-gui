@@ -25,14 +25,13 @@ show_menus() {
     echo "~~~~~~~~~~~~~~~~~~~~~"
     echo " SELECT - DISTRIBUTION "
     echo "~~~~~~~~~~~~~~~~~~~~~"
-    echo "1. KDE NEON BIONIC"
-    echo "2. K/UBUNTU 20.04+ / KDE NEON FOCAL"
-    echo "3. MANJARO/ARCH"
-    echo "4. ALPINE LINUX"
-    echo "5. openSUSE Leap 15.x"
-    echo "6. OTHERS"
-    echo "7. UPDATE INSTALLATION"
-    echo "8. EXIT"
+    echo "1. KDE NEON / K/UBUNTU 20.04+"
+    echo "2. MANJARO/ARCH"
+    echo "3. ALPINE LINUX"
+    echo "4. openSUSE Leap 15.x"
+    echo "5. OTHERS"
+    echo "6. UPDATE INSTALLATION"
+    echo "7. EXIT"
 }
 
 read_options() {
@@ -40,14 +39,13 @@ read_options() {
 	local choice
 	read -p "Enter choice [ 1 - 8 ] " choice
 	case $choice in
-		1) neon ;;
-		2) kubuntu ;;
-		3) manjaro ;;
-		4) alpine ;;
-		5) opensuse ;;
-		6) others ;;
-		7) updateinstall;;
-		8) exit 0;;
+		1) kubuntu ;;
+		2) manjaro ;;
+		3) alpine ;;
+		4) opensuse ;;
+		5) others ;;
+		6) updateinstall;;
+		7) exit 0;;
 		*) echo -e "${RED}Error...${STD}" && sleep 2
 	esac
 }
@@ -58,23 +56,13 @@ function found_exe() {
    hash "$1" 2>/dev/null
 }
 
-neon() {
-    echo "Starting Installation For KDE NEON"
-    echo ""
-    echo "Following Packages Will Be Installed: git-core g++ cmake extra-cmake-modules kio-dev gettext pkg-config qml-module-qtwebengine pkg-kde-tools qtbase5-dev qtdeclarative5-dev libqt5websockets5-dev libkf5i18n-dev libkf5notifications-dev libkf5plasma-dev libkf5kio-dev libqt5webview5-dev"
-    echo ""
-    echo "Please Enter Authentication For Installing System Dependencies"
-    sudo apt-get install -y git-core g++ cmake extra-cmake-modules kio-dev gettext pkg-config qml-module-qtwebengine pkg-kde-tools qtbase5-dev qtdeclarative5-dev libqt5websockets5-dev libkf5i18n-dev libkf5notifications-dev libkf5plasma-dev libkf5kio-dev libqt5webview5-dev qtmultimedia5-dev
-    build_gui
-}
-
 kubuntu() {
-    echo "Starting Installation For K/Ubuntu 20.04 +"
+    echo "Starting Installation For KDE NEON / K/Ubuntu 20.04 +"
     echo ""
     echo "Following Packages Will Be Installed: git-core g++ cmake extra-cmake-modules gettext pkg-config qml-module-qtwebengine pkg-kde-tools qtbase5-dev qtdeclarative5-dev libkf5kio-dev libqt5websockets5-dev libkf5i18n-dev libkf5notifications-dev libkf5plasma-dev libqt5webview5-dev"
     echo ""
     echo "Please Enter Authentication For Installing System Dependencies"
-    sudo apt-get install -y git-core g++ cmake extra-cmake-modules gettext pkg-config qml-module-qtwebengine pkg-kde-tools qtbase5-dev qtdeclarative5-dev libkf5kio-dev libqt5websockets5-dev libkf5i18n-dev libkf5notifications-dev libkf5plasma-dev libqt5webview5-dev qtmultimedia5-dev
+    sudo apt-get install -y git-core g++ cmake extra-cmake-modules gettext pkg-config qml-module-qtwebengine pkg-kde-tools qtbase5-dev qtdeclarative5-dev libkf5kio-dev libqt5websockets5-dev libkf5i18n-dev libkf5notifications-dev libkf5plasma-dev libqt5webview5-dev qtmultimedia5-dev qml-module-qtmultimedia
     build_gui
 }
 
@@ -178,7 +166,29 @@ function install_lottie() {
 }   
 
 function complete_installer() {
+      clear
+      echo "Select a configuration for the installation"
+      echo "Note: Selecting a configuration will create a mycroft.conf file installed in /etc/mycroft/ folder"
+      echo ""
+      echo "1. Install Mark-2 Configuration To Emulate Mark-2"
+      echo "2. Install KDE Desktop Configuration"
+      echo "3. Skip Configuration"
+      echo "4. Exit"
+
+      local configuration_choice
+      read -p "Enter choice [ 1 - 3 ] " configuration_choice
+      case $configuration_choice in
+          1) install_mark2;;
+          2) install_kde;;
+          3) skip_config;;
+          4) exit 0;;
+      esac
+}
+
+
+function install_mark2() {
     echo " "
+    echo "Installing Mark-2 Configuration"
     if [[ ! -f /etc/mycroft/mycroft.conf ]] ; then
         if [[ ! -d /etc/mycroft ]] ; then
             sudo mkdir /etc/mycroft
@@ -203,6 +213,46 @@ EOF
         echo '}'
         echo ""
     fi    
+    echo "Installation complete!"
+    echo "To run, invoke:  mycroft-gui-app"
+    exit 0
+}
+
+function install_kde() {
+    echo " "
+    echo "Installing KDE Configuration"
+    if [[ ! -f /etc/mycroft/mycroft.conf ]] ; then
+        if [[ ! -d /etc/mycroft ]] ; then
+            sudo mkdir /etc/mycroft
+        fi
+
+cat <<EOF | sudo tee /etc/mycroft/mycroft.conf
+{
+    "enclosure": {
+        "platform": "kde"
+    }
+}
+EOF
+
+    fi
+
+    if [[ -f /etc/mycroft/mycroft.conf ]] ; then
+        echo "Found an existing Mycroft System Level Configuration at /etc/mycroft/mycroft.conf"
+        echo "Please add the following enclosure settings manually to existing configuration to ensure working setup:"
+        echo " "
+        echo '"enclosure": {'
+        echo '     "platform": "kde"'
+        echo '}'
+        echo ""
+    fi
+    echo "Installation complete!"
+    echo "To run, invoke:  mycroft-gui-app"
+    exit 0
+}
+
+function skip_config() {
+    echo " "
+    echo "Skipping Configuration"
     echo "Installation complete!"
     echo "To run, invoke:  mycroft-gui-app"
     exit 0
