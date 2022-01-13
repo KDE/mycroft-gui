@@ -14,7 +14,7 @@ Item {
     property int speed: 4000
     property int delay: 4000
     property var marqueeWidth: width
-    property bool righToLeft: false
+    property bool rightToLeft: false
     property int distance: marqueeWidth / 2
 
     onWidthChanged: {

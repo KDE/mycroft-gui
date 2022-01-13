@@ -22,63 +22,59 @@ import org.kde.kirigami 2.4 as Kirigami
 
 Label {
     id: root
-
+    
     Layout.alignment: Qt.AlignCenter
+
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
-    //font.capitalization: Font.AllUppercase
-
-    //TODO: to remove, all of that should end up in the device system setup
-    font.family: "Noto Sans Display"
-
-    fontSizeMode: Text.Fit;
-    TextMetrics {
-        id: metrics
-        font {
-            capitalization: root.font.capitalization
-            family: root.font.family
-            italic: root.font.italic
-            styleName: root.font.styleName
-            letterSpacing: root.font.letterSpacing
-            strikeout: root.font.strikeout
-            underline: root.font.underline
-            weight: root.font.weight
-            wordSpacing: root.font.wordSpacing
-        }
-        text: root.text
-    }
-
-    Layout.preferredWidth: paintedWidth
-    Layout.preferredHeight: paintedHeight
-    font.pixelSize: 1024
-
-    Binding {
-        target: root
-        property: "font.pixelSize"
-        value: root.height
-        when: root.wrapMode !== Text.NoWrap
-    }
-
-    onHeightChanged: if (root.wrapMode === Text.NoWrap) pixelSizeTimer.restart()
-    onWidthChanged: if (root.wrapMode === Text.NoWrap) pixelSizeTimer.restart()
-
-    Timer {
-        id: pixelSizeTimer
-        interval: 250
-        onTriggered: {
-            if (!root.visible) {
-                return;
-            }
-            metrics.font.pixelSize = root.parent.height
-            while (( metrics.tightBoundingRect.width > width || metrics.tightBoundingRect.height > height)
-                   && metrics.font.pixelSize > 8) {
-                --metrics.font.pixelSize;
-            }
-            root.font.pixelSize = metrics.font.pixelSize
-        }
-    }
+    fontSizeMode: Text.Fit
+    minimumPixelSize: 5
+    font.pixelSize: 250
 
     renderType: height > 40
         ? Text.QtRendering
         : (Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering)
+
+    Timer {
+        id: sizeModeChangeTimer
+        interval: 50
+        running: false
+        repeat: false
+
+        onTriggered: {
+            if (fontSizeMode == 1) {
+                if(paintedHeight > root.height) {
+                    // Text Height is bigger than implicit height switch font size mode to fit
+                    root.fontSizeMode = 3
+                    opacity = 1
+                } else {
+                    opacity = 1
+                }
+            }
+        }
+    }
+
+    onTextChanged: {
+        var wordlist = text.split(" ")
+        var wordcount = text.split(" ").length
+        if(wordcount <= 1) {
+            fontSizeMode = Text.HorizontalFit
+            opacity = 0
+            // Do text height check if we are in horizontal fit mode to make sure text is not bigger than available height
+            sizeModeChangeTimer.start()
+        } else {
+            // Check how many characters are in the longest word in the wordlist
+            var longestWord = wordlist.reduce(function(a, b) {
+                return a.length > b.length ? a : b;
+            });
+            var longestWordLength = longestWord.length
+
+            // If char count in longest word less than 2 sylabels, use horizontal fit
+            if(longestWordLength < 2) {
+                fontSizeMode = Text.HorizontalFit   
+            } else {
+                fontSizeMode = Text.VerticalFit
+            }
+        }
+    }
 }
