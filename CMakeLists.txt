@@ -60,7 +60,13 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Android")
     find_package(OpenSSL REQUIRED)
 endif()
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Kirigami2)
+
+if(KF5Kirigami2_VERSION VERSION_LESS 5.91.0)
+    SET(KirigamiLegacy TRUE)
+else()
+    SET(KirigamiLegacy FALSE)
+endif()
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
     find_package(Qt5Widgets ${QT_MIN_VERSION} REQUIRED)

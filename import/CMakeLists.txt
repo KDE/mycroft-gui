@@ -13,6 +13,7 @@ set(mycroftimport_SRCS
     filereader.cpp
     audiorec.cpp
     mediaservice.cpp
+    colorscheme.cpp
     thirdparty/fftcalc.cpp
     thirdparty/fft.cpp
     )
@@ -34,6 +35,7 @@ target_link_libraries(mycroftplugin
         PUBLIC
             Qt5::Core
             Qt5::Multimedia
+            KF5::Kirigami2
             ${mycroftplugin_EXTRA_LIBS}
         PRIVATE
             Qt5::Qml

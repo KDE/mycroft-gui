@@ -29,6 +29,7 @@
 #include "sessiondatamap.h"
 #include "audiorec.h"
 #include "mediaservice.h"
+#include "colorscheme.h"
 
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -75,6 +76,14 @@ static QObject *mediaServiceSingletonProvider(QQmlEngine *engine, QJSEngine *scr
     return new MediaService;
 }
 
+static QObject *colorSchemeSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return new ColorScheme;
+}
+
 void MycroftPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(QLatin1String(uri) == QLatin1String("Mycroft"));
@@ -84,6 +93,7 @@ void MycroftPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<FileReader>(uri, 1, 0, "FileReader", fileReaderSingletonProvider);
     qmlRegisterSingletonType<AudioRec>(uri, 1, 0, "AudioRec", audioRecSingletonProvider);
     qmlRegisterSingletonType<MediaService>(uri, 1, 0, "MediaService", mediaServiceSingletonProvider);
+    qmlRegisterSingletonType<ColorScheme>(uri, 1, 0, "ColorScheme", colorSchemeSingletonProvider);
     qmlRegisterSingletonType(QUrl(QStringLiteral("qrc:/qml/Units.qml")), uri, 1, 0, "Units");
     qmlRegisterSingletonType(QUrl(QStringLiteral("qrc:/qml/SoundEffects.qml")), uri, 1, 0, "SoundEffects");
     qmlRegisterType<AbstractSkillView>(uri, 1, 0, "AbstractSkillView");
