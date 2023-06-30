@@ -19,6 +19,14 @@ _______________________________________________________________________
 
 _____________________________________________________________________________________________
 
+## License
+
+We are pleased to announce that, following the acceptance and clearance of all contributors, the license for Mycroft GUI has been officially set as GPL version 3.0. This decision reflects our commitment to open-source principles and ensures that the software remains accessible and available for use by the community. We extend our gratitude to all those who have contributed to the project, and we look forward to continued collaboration and innovation within the Mycroft GUI community.
+
+As a project committed to the principles and values of the KDE community, we firmly oppose any unauthorized appropriation of code by private organizations. We uphold the KDE Philosophy, which promotes freedom, openness, and the respectful sharing of knowledge and resources.
+
+All future and past versions henceforth of code shared are relicenced towards the above policy, there will be no exceptions to the above policy and license usecase.
+
 ## Getting Started
 
 The following guide will provide a set of instructions to get you started with installing Mycroft GUI on your system. *Note:* All non virtual environment setups should generally follow the [General Setup Instructions](#general-setup-instructions) steps. 
